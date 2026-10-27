@@ -18,7 +18,7 @@ function validateWorkerUrl(raw){
  try{
   const u=new URL(String(raw||'').trim());
   if(u.protocol!=='https:'||u.username||u.password||u.search||u.hash)throw Error('invalid');
-  return u.origin+(u.pathname==='/'?'':u.pathname.replace(/\\/$/,''));
+  return u.origin+(u.pathname==='/'?'':u.pathname.replace(/\/$/,''));
  }catch{return '';}
 }
 function acceptInvite(){
