@@ -71,6 +71,14 @@ Initial data is in `public/data.json` (machine-readable) and `public/data.js` (u
 
 GitHub Pages is live at <https://glytchedup.github.io/PPCC-2026-Conference-Companion/>. Each phone can use it independently. Cross-phone updates require the Cloudflare Worker as a shared endpoint and **account authorization by the Cloudflare account owner**.
 
+### Fast phone pairing
+
+The latest Schedule app provides a **Copy private invite link** button under **More → Settings & sync** after the Worker URL and room key have been saved. Send that link privately to Peter. On his device, the link opens the existing GitHub Pages app; after his normal access-code unlock, he confirms the Worker hostname and joins the same shared room. This imports only the endpoint and room key into his device, then begins syncing. The invite token lives in the URL fragment, which is removed from the address bar after import and never committed to GitHub.
+
+- **Do not post invite links publicly.** They contain the shared room credential and anyone with it can read and modify shared notes.
+- Both people still have separate session selections. Person-specific schedule changes are keyed to David or Peter; each user can view both schedules in the app.
+- A deployed Worker is required: GitHub authorization alone does not confirm the Cloudflare build completed. Open the Worker in Cloudflare and copy its actual `https://...workers.dev` URL. Successful **Save & sync** is the confirmation, not an access-code unlock.
+
 ### Deploy in the Cloudflare dashboard
 
 [**Deploy the shared-sync Worker to Cloudflare**](https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2FGlytchedup%2FPPCC-2026-Conference-Companion)
