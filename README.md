@@ -8,6 +8,18 @@ Opening the app on a new browser or device now displays a code-entry screen befo
 
 **Security limit:** this is only a client-side convenience barrier. The public `public/data.js`, `public/data.json`, `public/app.js`, and other website files remain retrievable by anyone who knows the URL. It does not provide authorization or encryption, and cannot protect confidential notes. Do not mistake it for secure hosting. For true restricted access, move the site behind Cloudflare Access (email one-time PIN or another provider) and stop publishing the app publicly on GitHub Pages. Cloudflare sync room keys are separate and still needed for sharing device changes.
 
+## Mobile schedule builder (October 27 update)
+
+The app now opens to **My schedule** instead of a dashboard. On phones, the five-section navigation is fixed to the bottom: Schedule, Find, People, Notes, More. Choose David, Peter, or Both and switch conference days.
+
+- **Find**: Search the full published session catalog by title/topic/room, filter by time and field-guide picks, and display 20 results at once for mobile performance.
+- **Add / Replace**: Add a talk in an open slot, or approve a conflicting replacement. The app preserves each person's changes separately.
+- **Swap**: Tap Swap directly on a schedule card to browse concurrent sessions, search, choose, or restore the planned session.
+- **People**: Search product-team contacts, update outreach, add a follow-up meeting, or capture a note.
+- **More**: Access objectives, device lock, sync setup, and backup/export without cluttering the schedule screen.
+
+Selections, removals, and additions are stored as events locally. Cross-device sync requires the separately deployed Cloudflare Worker; the worker now supports the new `plan` and `hide` event types.
+
 ## What works out of the box
 
 - First-visit access-code screen that remembers an approved browser, with a **Lock this device** action in Settings.
