@@ -1,0 +1,12 @@
+name = "ppcc-2026-companion"
+main = "worker.js"
+compatibility_date = "2026-10-27"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# After creating a KV namespace, replace the placeholder ID below.
+[[kv_namespaces]]
+binding = "EVENTS"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
