@@ -23,6 +23,7 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check public/app.js
+          node --check public/access.js
           node --check public/data.js
           node --check public/service-worker.js
           node --check worker.js
@@ -30,6 +31,12 @@ jobs:
         run: |
           python - <<'PYVALIDATE'
           import json
+          from pathlib import Path
+          page = Path('public/index.html').read_text()
+          assert 'id="access-gate"' in page
+          assert '<script src="access.js"></script>' in page
+          assert '<script src="data.js"></script>' not in page
+          assert '<script src="app.js"></script>' not in page
           with open('public/data.json', encoding='utf-8') as f:
               d=json.load(f)
           assert len(d['sessions']) == 24
