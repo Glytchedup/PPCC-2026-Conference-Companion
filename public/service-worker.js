@@ -1,4 +1,4 @@
-const CACHE='ppcc-2026-v5';const URLS=['./','./index.html','./style.css','./data.js','./app.js','./access.js','./manifest.webmanifest','./icon-192.png','./icon-512.png'].map(p=>new URL(p,self.registration.scope).href);
+const CACHE='ppcc-2026-v6';const URLS=['./','./index.html','./style.css','./data.js','./app.js','./access.js','./manifest.webmanifest','./icon-192.png','./icon-512.png'].map(p=>new URL(p,self.registration.scope).href);
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(URLS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).pathname.startsWith('/api/'))return;e.respondWith(fetch(e.request).then(r=>{if(r.ok&&new URL(e.request.url).origin===self.location.origin){const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));}return r;}).catch(()=>caches.match(e.request)));});

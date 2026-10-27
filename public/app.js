@@ -7,7 +7,7 @@ const shortDay={'2026-10-27':'Tue 27','2026-10-28':'Wed 28','2026-10-29':'Thu 29
 const tryJson=(s,def)=>{try{return JSON.parse(s)||def}catch{return def}};
 const uid=()=>{const b=new Uint8Array(12);crypto.getRandomValues(b);return Array.from(b,x=>x.toString(16).padStart(2,'0')).join('')};
 let events=tryJson(localStorage.getItem(STORAGE),[]),config=Object.assign({url:'',room:''},tryJson(localStorage.getItem(CONFIG),{}));
-if(!config.url&&location.hostname.endsWith('.workers.dev'))config.url=location.origin;
+if(!config.url)config.url=location.hostname.endsWith('.workers.dev')?location.origin:'https://ppcc-2026-companion.trip-recommendation-prototype.workers.dev';
 let knownRemote=new Set();
 let page='agenda',person=(localStorage.getItem('ppcc2026.person')||'David'),day='2026-10-27',altOpen='',contactsFilter='All',notesFilter='All',onView=false,lastSynced='',syncBusy=false,findQuery='',findTime='all',findGuide=false,findLimit=20;
 const save=()=>localStorage.setItem(STORAGE,JSON.stringify(events));const saveCfg=()=>localStorage.setItem(CONFIG,JSON.stringify(config));
