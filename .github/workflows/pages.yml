@@ -34,9 +34,10 @@ jobs:
               d=json.load(f)
           assert len(d['sessions']) == 24
           assert len(d['alternatives']) == 13
+          assert len(d['catalog']) >= 170
           assert len(d['contacts']) == 17
           assert len(d['goals']) == 8
-          print('Agenda, alternatives, people and objectives verified')
+          print('Agenda, official catalog, alternatives, people and objectives verified')
           PYVALIDATE
   deploy:
     runs-on: ubuntu-latest
