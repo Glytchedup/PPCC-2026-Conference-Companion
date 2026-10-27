@@ -4,7 +4,7 @@
  * Shared room key is never logged or persisted; KV prefix uses its SHA-256 digest.
  * Authentication is possession of the high-entropy room key.
  */
-const ALLOWED_TYPES=new Set(['choice','status','rating','contact','goal','check','note','meeting','delete-note','delete-meeting']);
+const ALLOWED_TYPES=new Set(['choice','status','rating','contact','goal','check','note','meeting','delete-note','delete-meeting','plan','hide']);
 const cors={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'Content-Type, X-Room-Key','Access-Control-Allow-Methods':'GET, POST, OPTIONS','Cache-Control':'no-store'};
 const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{...cors,'Content-Type':'application/json;charset=utf-8'}});
 async function digest(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
