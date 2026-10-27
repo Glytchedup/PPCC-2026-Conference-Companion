@@ -2,8 +2,15 @@
 
 A mobile-first conference field app for **David and Peter**, seeded from `PPCC_2026_Two_Person_Plan.pdf` (Oct 27–29, MGM Grand). The plan was prepared Oct 24 and revised Oct 26.
 
+## First-visit access code
+
+Opening the app on a new browser or device now displays a code-entry screen before the agenda is loaded. Enter the administrator-provided shared code once; that browser remembers access until its site data is cleared, the code is rotated, or **Settings → Lock this device** is used. Share the code privately with Peter. The raw code is not stored in the repository; `public/access.js` contains only a SHA-256 verifier. GitHub Pages deployment checks that the app scripts are loaded by the gate rather than directly.
+
+**Security limit:** this is only a client-side convenience barrier. The public `public/data.js`, `public/data.json`, `public/app.js`, and other website files remain retrievable by anyone who knows the URL. It does not provide authorization or encryption, and cannot protect confidential notes. Do not mistake it for secure hosting. For true restricted access, move the site behind Cloudflare Access (email one-time PIN or another provider) and stop publishing the app publicly on GitHub Pages. Cloudflare sync room keys are separate and still needed for sharing device changes.
+
 ## What works out of the box
 
+- First-visit access-code screen that remembers an approved browser, with a **Lock this device** action in Settings.
 - Individual David/Peter agenda views and combined view, with a full three-day timetable, rooms, priorities, objectives and links to official session pages.
 - **Swap session** opens a searchable same-time picker with all **172 published concurrent sessions** imported from the official October 24 PDF, plus curated field-guide recommendations. Choose any concurrent session for David or Peter independently and restore the original instantly; the other person’s plan is unchanged.
 - Session attended/skipped statuses, usefulness scores and separate check-ins even when both share a keynote.
@@ -16,7 +23,7 @@ All entries are **tentative**; the field guide does not imply speaker availabili
 
 ## GitHub Pages deployment
 
-This repository includes `.github/workflows/pages.yml`; every push to `main` validates and publishes **only** the `public/` folder using official GitHub Pages actions. No build tools or secrets are needed.
+This repository includes `.github/workflows/pages.yml`; every push to `main` validates and publishes **only** the `public/` folder using official GitHub Pages actions. No build tools or repository secrets are needed.
 
 1. Create a GitHub repository, suggested name `PPCC-2026-Conference-Companion`. **Do not initialize with a README** if you will push this entire directory using `git`.
 2. Upload/push the full contents of this directory, including the `.github/` folder, to the repository's `main` branch.
