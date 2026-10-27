@@ -4,3 +4,20 @@
 
 /* Session picker */
 .swap-button{background:#126d77!important;color:#efffff!important;border-color:#278e98!important;display:inline-flex;gap:9px;align-items:center;justify-content:center}.swap-count{font-size:11px;opacity:.85;font-weight:600}.chip.changed{background:#245f69;color:#a1f3ea}.swap-dialog{width:min(730px,calc(100vw - 24px));max-height:90vh;padding:22px;overscroll-behavior:contain}.swap-heading{display:flex;justify-content:space-between;gap:12px;align-items:start}.swap-heading h2{margin:7px 0}.selected-session{padding:12px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;margin:10px 0}.swap-dialog input[type=search]{width:100%;margin:6px 0 12px}.swap-results{max-height:54vh;overflow-y:auto;padding-right:4px}.swap-option{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 9px;border-bottom:1px solid var(--line)}.swap-option[hidden]{display:none}.swap-option-info{flex:1;min-width:0}.swap-option-info strong{font-size:14px;display:block;line-height:1.45}.swap-option .meta{font-size:12px;margin:5px 0}.swap-option button{flex-shrink:0;min-width:78px}.recommendation{display:inline-block;font-size:11px;color:var(--accent);font-weight:700;margin-top:4px}.swap-option p{font-size:12px;color:var(--muted);margin:5px 0}.original-option{background:#102c39;border-radius:8px}.swap-footer{padding-top:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:11px}.swap-dialog button:disabled{opacity:.58;cursor:default}@media(max-width:600px){.swap-dialog{padding:14px}.swap-results{max-height:58vh}.swap-option{align-items:flex-start}.swap-option button{min-width:70px;padding:9px 10px;font-size:12px}}
+/* A one-time access prompt is a convenience screen, not server-side protection. */
+html:not(.is-unlocked) .top,html:not(.is-unlocked) .shell,html:not(.is-unlocked) #dialog-root{display:none!important}
+.access-gate[hidden],.access-error[hidden]{display:none!important}
+.access-gate{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:24px}
+.access-card{background:linear-gradient(155deg,#14293e,#0e1b2e);border:1px solid #35566a;box-shadow:0 24px 80px rgba(0,0,0,.35);border-radius:20px;padding:clamp(26px,6vw,48px);width:min(100%,440px)}
+.access-mark{display:inline-block;background:#43c4c9;color:#052331;font-size:25px;font-weight:900;letter-spacing:-1px;padding:13px 15px;border-radius:13px;margin-bottom:26px}
+.access-mark span{font-size:13px}
+.access-card h1{font-size:clamp(30px,6vw,39px);margin:10px 0}
+.access-intro{color:var(--muted);margin:0 0 28px;font-size:14px}
+#access-form{display:flex;flex-direction:column;gap:12px}
+#access-form label{font-size:13px;font-weight:700}
+#access-code{border:1px solid var(--line);background:#081626;color:var(--text);padding:14px 15px;border-radius:10px;width:100%;font-size:16px}
+#access-form .btn{margin-top:4px;padding:13px;font-size:14px}
+#access-form .btn:disabled{opacity:.65;cursor:wait}
+.access-error{border-left:3px solid #ffb19e;padding:8px 12px;color:#ffb19e;font-size:13px;margin:2px 0}
+.access-help{font-size:12px;line-height:1.55;color:var(--muted);margin:24px 0 0}
+.access-noscript{padding:20px;text-align:center;color:var(--danger)}
