@@ -50,14 +50,23 @@ Initial data is in `public/data.json` (machine-readable) and `public/data.js` (u
 
 ## Shared live updates with Cloudflare Workers (optional)
 
-**Local notes do not automatically appear on the other person's phone until you deploy a sync endpoint and configure both devices.** For cross-device sync, this package contains a lightweight Worker + KV implementation. The Worker can also serve the front end from the same domain, or be used only as a sync API for the GitHub Pages front end.
+GitHub Pages is live at <https://glytchedup.github.io/PPCC-2026-Conference-Companion/>. Each phone can use it independently. Cross-phone updates require the Cloudflare Worker as a shared endpoint and **account authorization by the Cloudflare account owner**.
 
-1. Install [Node.js](https://nodejs.org/) and sign in to your own Cloudflare account: `npx wrangler login`.
-2. Create a KV namespace: `npx wrangler kv namespace create EVENTS`. Copy the returned namespace ID to `wrangler.toml`, replacing `REPLACE_WITH_YOUR_KV_NAMESPACE_ID`.
-3. Deploy from this directory: `npx wrangler deploy`. The output gives you a `https://...workers.dev` URL, which hosts a copy of the app and the sync API. If you are using the GitHub Pages website, keep opening that Pages URL and enter the Worker URL in its Settings.
-4. Open the same app website (the Pages URL or Worker URL) on both devices. In **Settings**, set the **Worker URL** to that URL, and **Generate strong key** on one device. Securely give the same 48-character key to the other attendee and paste it into Settings there.
-5. Tap **Save & sync** on both devices. Both may add notes/check-ins. The app polls every 30 seconds and syncs new updates while connected. Offline updates are stored locally and uploaded later.
-6. On phones, use **Add to Home Screen** from the browser for the PWA (served via HTTPS).
+### Deploy in the Cloudflare dashboard
+
+[**Deploy the shared-sync Worker to Cloudflare**](https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2FGlytchedup%2FPPCC-2026-Conference-Companion)
+
+1. Open the deployment link, sign in to your Cloudflare account, authorize repository access if prompted, and confirm the Worker deployment. Cloudflare's GitHub integration may offer to clone/fork the public repository into your account.
+2. Cloudflare Workers Builds automatically provisions the `EVENTS` KV namespace (Wrangler 4.45 or newer); no KV ID or API token needs to be pasted into this GitHub repository. Record the deployed `https://...workers.dev` address.
+3. On both phones, open the deployed Worker site **or** the existing GitHub Pages site. In **Settings**, paste the same Worker URL as the sync endpoint. If visiting the Worker-hosted site, the URL is filled in automatically.
+4. Tap **Generate strong key** on David's phone; share the key privately with Peter and paste the same value in Peter's Settings. Do not post the key publicly or commit it to GitHub.
+5. Tap **Save & sync** on both devices. Future activity uploads when connected and sync checks run every 30 seconds. When offline, updates remain on each device until connectivity returns.
+
+The Cloudflare account owner must authorize deployment; GitHub access alone cannot deploy into a personal Cloudflare account. Check the Worker deployment result before treating phone-to-phone sync as enabled.
+
+### Alternative command-line deployment
+
+If the deploy button is unavailable, clone this repository and run `npx wrangler@latest login` followed by `npx wrangler@latest deploy`. Wrangler automatically creates/binds `EVENTS` the first time. No manual namespace ID is needed. For Cloudflare Git builds, use **Build command: `npm install` (or leave blank)** and **Deploy command: `npx wrangler deploy`** if prompted.
 
 ### Security and data handling
 
