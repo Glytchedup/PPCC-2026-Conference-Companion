@@ -6,7 +6,7 @@ compatibility_date = "2026-10-27"
 directory = "./public"
 binding = "ASSETS"
 
-# After creating a KV namespace, replace the placeholder ID below.
+# Wrangler 4.45+ automatically provisions the KV namespace on deployment.
+# Do not commit account-specific namespace IDs or secrets.
 [[kv_namespaces]]
 binding = "EVENTS"
-id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
