@@ -24,7 +24,7 @@ Selections, removals, and additions are stored as events locally. Cross-device s
 
 - First-visit access-code screen that remembers an approved browser, with a **Lock this device** action in Settings.
 - Individual David/Peter agenda views and combined view, with a full three-day timetable, rooms, priorities, objectives and links to official session pages.
-- **Swap session** opens a searchable same-time picker with all **172 published concurrent sessions** imported from the official October 24 PDF, plus curated field-guide recommendations. Choose any concurrent session for David or Peter independently and restore the original instantly; the other person’s plan is unchanged.
+- **Swap session** opens a searchable same-time picker with all **226 scheduled conference sessions**, including **50 roundtables**, reconciled against the official live catalog on October 27, plus curated field-guide recommendations. Choose any concurrent session for David or Peter independently and restore the original instantly; the other person’s plan is unchanged.
 - Session attended/skipped statuses, usefulness scores and separate check-ins even when both share a keynote.
 - A named-target tracker with 17 conversation tracks, questions, people to seek, requests and supporting evidence.
 - Eight conference objectives, a six-item sanitized evidence-pack checklist, and action-oriented structured meeting notes.
@@ -65,7 +65,7 @@ python -m http.server 8000
 # open http://localhost:8000
 ```
 
-Initial data is in `public/data.json` (machine-readable) and `public/data.js` (used by the web app). Concurrent-session options are sourced from the published [PPCC October 24 schedule](https://devintxcontent.blob.core.windows.net/showcontent/Schedule/PPCC-Schedule-2026-10-24.pdf). No external JS/CSS dependencies.
+Initial data is in `public/data.json` (machine-readable) and `public/data.js` (used by the web app). Concurrent-session options are sourced from the [official live PPCC session catalog](https://powerplatformconf.com/sessions), checked October 27 (Tuesday: 64, Wednesday: 103, Thursday: 59). The October 24 PDF omits roundtables and is retained as a supplementary source. Existing session IDs are preserved for saved schedules; one session absent from the live catalog is retained only to resolve previous selections. Swap and time filters include overlapping sessions with staggered start times. No external JS/CSS dependencies.
 
 ## Shared live updates with Cloudflare Workers (optional)
 

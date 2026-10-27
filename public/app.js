@@ -67,7 +67,7 @@ function selectedEntries(who,s){
 }
 function allScheduled(s,filter=person){return (filter==='Both'?['David','Peter']:[filter]).flatMap(w=>selectedEntries(w,s)).sort((a,b)=>a.day.localeCompare(b.day)||a.__current.start.localeCompare(b.__current.start)||a.who.localeCompare(b.who));}
 function catalogForDay(d){
- const candidates=[...D.sessions,...D.alternatives,...(D.catalog||[])].filter(a=>a.day===d&&a.start&&a.end).map(a=>({...a,sourceType:D.sessions.includes(a)?'Plan':D.alternatives.includes(a)?'Suggested':'Agenda'}));
+ const candidates=[...D.sessions,...D.alternatives,...(D.catalog||[])].filter(a=>a.day===d&&a.start&&a.end&&a.available!==false&&a.kind!=='hold').map(a=>({...a,sourceType:D.sessions.includes(a)?'Plan':D.alternatives.includes(a)?'Suggested':'Agenda'}));
  const result=[],pos=new Map();
  for(const a of candidates){const k=a.day+':'+a.start+':'+normalized(a.title).replace(/ overlap$/,'');const index=pos.get(k);if(index===undefined){pos.set(k,result.length);result.push(a);}else{const old=result[index];if((old.room||'').toLowerCase().includes('not specified')&&!String(a.room||'').toLowerCase().includes('not specified'))result[index]={...a,sourceType:old.sourceType==='Suggested'?'Suggested':a.sourceType};}}
  return result.sort((a,b)=>a.start.localeCompare(b.start)||(a.sourceType==='Suggested'?-1:0)-(b.sourceType==='Suggested'?-1:0)||a.title.localeCompare(b.title));
@@ -106,10 +106,11 @@ function optionsFor(it){
  ...D.sessions.filter(a=>a.id!==it.id&&overlaps(a,it)).map(a=>({...a,recommendation:a.who==='Both'?'Shared keynote':'Other attendee’s planned session'})),
  ...(D.catalog||[]).filter(a=>overlaps(a,it)).map(a=>({...a,recommendation:'Official schedule'}))];
  const seen=new Set([normalized(it.title)]),out=[];
- for(const a of candidates){const n=normalized(a.title);if(seen.has(n))continue;seen.add(n);out.push(a)}
+ for(const a of candidates){if(a.available===false||a.kind==='hold')continue;const n=normalized(a.title);if(seen.has(n))continue;seen.add(n);out.push(a)}
  return out;
 }
-function activeItem(it,s){const id=s.choices[key(it.id,it.who)];return [...D.alternatives,...D.sessions,...(D.catalog||[])].find(a=>a.id===id&&overlaps(a,it))||it;}
+// A replacement may move through overlapping windows beyond the original slot.
+function activeItem(it,s){const id=s.choices[key(it.id,it.who)];return [...D.alternatives,...D.sessions,...(D.catalog||[])].find(a=>a.id===id&&a.day===it.day)||it;}
 function sessionStateKey(it,s){return key(activeItem(it,s).id,it.who);}
 function render(){
  const s=snapshot();
@@ -132,7 +133,7 @@ function itemCard(it,s){
 
 function swapModal(id,who){
  const s=snapshot(),it=selectedEntries(who,s).find(a=>a.id===id);if(!it)return;
- const current=it.__current||activeItem(it,s),options=optionsFor(it).filter(a=>a.day===it.day&&overlaps(a,current));
+ const current=it.__current||activeItem(it,s),options=optionsFor(current).filter(a=>it.__added||normalized(a.title)!==normalized(it.title));
  const seen=new Set(),filtered=options.filter(o=>{const k=normalized(o.title)+o.start;if(seen.has(k))return false;seen.add(k);return true;});
  const root=$('#dialog-root');
  const renderOption=a=>`<div class="swap-option" data-swap-search="${esc(normalized(a.title+' '+a.room))}"><div class="swap-option-info"><strong>${esc(a.title)}</strong><div class="meta">${timeBadge(a)} · ${esc(a.room||'Room TBC')}</div>${a.recommendation?.includes('Field guide')?'<span class="recommendation">Suggested in field guide</span>':''}</div><button class="${current.id===a.id?'outline':'btn'}" data-action="choose" data-id="${it.id}" data-who="${who}" data-alt="${a.id}" ${current.id===a.id?'disabled':''}>${current.id===a.id?'Current':'Select'}</button></div>`;
@@ -149,7 +150,7 @@ function renderAgenda(s){
 }
 function findResults(s){
  const who=whoEdit(),query=normalized(findQuery),choices=catalogForDay(day);
- let rows=choices.filter(a=>(!query||normalized(a.title+' '+a.room+' '+(a.people||'')).includes(query))&&(findTime==='all'||a.start===findTime)&&(!findGuide||a.sourceType!=='Agenda'));
+ let rows=choices.filter(a=>(!query||normalized(a.title+' '+a.room+' '+(a.people||'')).includes(query))&&(findTime==='all'||choices.some(slot=>slot.start===findTime&&overlaps(a,slot)))&&(!findGuide||a.sourceType!=='Agenda'));
  const scheduled=selectedEntries(who,s);
  rows.sort((a,b)=>{
   const as=scheduled.some(it=>normalized(it.__current.title)===normalized(a.title)&&it.day===a.day)?-1:0;

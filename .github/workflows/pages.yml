@@ -27,6 +27,8 @@ jobs:
           node --check public/data.js
           node --check public/service-worker.js
           node --check worker.js
+      - name: Verify session availability
+        run: node tests/session-availability.cjs
       - name: Validate conference plan
         run: |
           python - <<'PYVALIDATE'
