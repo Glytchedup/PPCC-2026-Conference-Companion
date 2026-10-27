@@ -1,0 +1,58 @@
+name: Publish Conference Companion
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: |
+          node --check public/app.js
+          node --check public/data.js
+          node --check public/service-worker.js
+          node --check worker.js
+      - name: Validate conference plan
+        run: |
+          python - <<'PYVALIDATE'
+          import json
+          with open('public/data.json', encoding='utf-8') as f:
+              d=json.load(f)
+          assert len(d['sessions']) == 24
+          assert len(d['alternatives']) == 13
+          assert len(d['contacts']) == 17
+          assert len(d['goals']) == 8
+          print('Agenda, alternatives, people and objectives verified')
+          PYVALIDATE
+  deploy:
+    runs-on: ubuntu-latest
+    needs: validate
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./public
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
